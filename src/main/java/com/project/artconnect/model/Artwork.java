@@ -98,10 +98,6 @@ public class Artwork {
     public void setStatus(Status status) {
         this.status = status;
     }
-	
-	public void setStatus(String status) {
-		this.status = Status.valueOf(status);
-	}
 
     public Artist getArtist() {
         return artist;

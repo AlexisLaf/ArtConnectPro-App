@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +36,21 @@ public class ExhibitionController {
         themeColumn.setCellValueFactory(new PropertyValueFactory<>("theme"));
 
         galleryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getGallery() != null ? cellData.getValue().getGallery().getName() : "Unknown"));
+                cellData.getValue().getGallery() != null
+                        ? cellData.getValue().getGallery().getName()
+                        : "Unknown"
+        ));
 
         refreshData();
     }
 
     private void refreshData() {
         List<Exhibition> all = new ArrayList<>();
-        for (Gallery g : galleryService.getAllGalleries()) {
-            all.addAll(g.getExhibitions());
+
+        for (Gallery gallery : galleryService.getAllGalleries()) {
+            all.addAll(galleryService.getExhibitionsByGallery(gallery));
         }
+
         exhibitionTable.setItems(FXCollections.observableArrayList(all));
     }
 }
