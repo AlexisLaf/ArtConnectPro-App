@@ -17,11 +17,12 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     public void initData(ArtistService artistService) {
-		/*for (Artist artist : artistService.getAllArtists()){
-			WorkshopDaoImpl.findbyInstructor(artist.get
+		for (Artist artist : artistService.getAllArtists()){
+			for (Workshop wshop : WorkshopDaoImpl.findbyInstructorname(artist.getName())){
+				wshop.setInstructor(artist);
+				workshops.put(wshop.getTitle(), wshop);
+			}
 		}
-        wsdao.findalll();
-		workshops.put(name, wshop);*/
     }
 
     private void addWorkshop(String title, LocalDateTime date, Artist instructor, double price, String level,

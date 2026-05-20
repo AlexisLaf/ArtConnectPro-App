@@ -21,7 +21,7 @@ public class WorkshopDaoImpl implements WorkshopDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setInt(1, Math.toIntExact(id));
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			
 
@@ -57,16 +57,16 @@ public class WorkshopDaoImpl implements WorkshopDao {
 		throw new UnsupportedOperationException();
 	}
 	
-	public List<Workshop> findbyInstructor(int id){
+	public static List<Workshop> findbyInstructorname(String name){
 		
 		Connection con = ConnectionManager.getConnection();
 		
-		String query = "select title, date, duration_minutes, max_participants, price, location, description, level from Workshop where instructor_artist_id = ?";
+		String query = "select title, date, duration_minutes, max_participants, price, location, description, level from Workshop w left Join Artist a on w.instructor_artist_id = a.artist_id where a.name = ?";
 
 		//Will automatically call res.close() after finishing the try clause.	
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
-			pstm.setInt(1, id);
-			ResultSet res = pstm.executeQuery(query);
+			pstm.setString(1, name);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Workshop> Workshops = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public class WorkshopDaoImpl implements WorkshopDao {
 
 		//Will automatically call res.close() after finishing the try clause.	
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Workshop> Workshops = new ArrayList<>();
 
