@@ -15,11 +15,11 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
 		
 		Connection con = ConnectionManager.getConnection();
 		
-		String query = "select title, start_date, end_date, description, curator_name, theme, gallery_id from Exhibition";
+		String query = "select title, start_date, end_date, description, curator_name, theme, exhibition_id from Exhibition";
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Exhibition> exhebits = new ArrayList<>();
 
@@ -35,7 +35,8 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
 				resex.setTheme(res.getString(6));
 
 				//resex.setGallery //gallery_id INT NOT NULL,
-				//resex.setArtworks
+				
+				resex.setArtworks(ArtworkDaoImpl.findByExhibit(res.getInt(7)));
 				
 				exhebits.add(resex);
 			}
@@ -48,7 +49,6 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
 		}
 	
 	/*
-    private Gallery gallery;
     private List<Artwork> artworks = new ArrayList<>();
 		
 		Exhibition_Artwork (
@@ -56,6 +56,44 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
     artwork_id INT NOT NULL,
 	*/	
 		
+	}
+	
+	public static List<Exhibition> findByGallery(int id){
+		
+		Connection con = ConnectionManager.getConnection();
+		
+		String query = "select title, start_date, end_date, description, curator_name, theme, exhibition_id from Exhibition where gallery_id= ?";
+
+		try (PreparedStatement pstm = con.prepareStatement(query)) {
+			pstm.setInt(1, id);
+			ResultSet res = pstm.executeQuery();
+			
+			List<Exhibition> exhebits = new ArrayList<>();
+
+			while (res.next()) {
+
+				Exhibition resex = new Exhibition();
+				
+				resex.setTitle(res.getString(1));
+				resex.setStartDate(res.getDate(2).toLocalDate());
+				resex.setEndDate(res.getDate(3).toLocalDate());
+				resex.setDescription(res.getString(4));
+				resex.setCuratorName(res.getString(5));
+				resex.setTheme(res.getString(6));
+
+				//resex.setGallery //set outside this function
+				
+				resex.setArtworks(ArtworkDaoImpl.findByExhibit(res.getInt(7)));
+				
+				exhebits.add(resex);
+			}
+			
+			return exhebits;
+			
+		} catch (SQLException e) {
+			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
+			return new ArrayList<>();
+		}
 	}
 
     public void save(Exhibition exhibition){

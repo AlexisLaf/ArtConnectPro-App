@@ -12,14 +12,14 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public class ArtworkDaoImpl implements ArtworkDao {
-    public List<Artwork> findAll(){
+    public static List<Artwork> findAlll(){
 		Connection con = ConnectionManager.getConnection();
 		
 		String query = "select title, creation_year, type, medium, dimensions, description, price, status, artist_id , artwork_id from Artwork";
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Artwork> Artworks = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 				resaw.setPrice(res.getDouble(7));
 				resaw.setStatus(res.getString(8));
 				
-				resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
+				//resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
 				
 				resaw.setTags(getTags(res.getInt(10)));
 				
@@ -51,6 +51,10 @@ public class ArtworkDaoImpl implements ArtworkDao {
 			return new ArrayList<>();
 		}
 		
+	}
+	
+	public List<Artwork> findAll(){
+		throw new UnsupportedOperationException();
 	}
 
     public void save(Artwork artwork){
@@ -72,7 +76,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setString(1, artistName);
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Artwork> Artworks = new ArrayList<>();
 
@@ -89,7 +93,47 @@ public class ArtworkDaoImpl implements ArtworkDao {
 				resaw.setPrice(res.getDouble(7));
 				resaw.setStatus(res.getString(8));
 				
-				resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
+				//resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
+				
+				resaw.setTags(getTags(res.getInt(10)));
+				
+				Artworks.add(resaw);
+
+			}
+			
+			return Artworks;
+			
+		} catch (SQLException e) {
+			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
+			return new ArrayList<>();
+		}
+	}
+	
+	public static List<Artwork> findByExhibit(int id){
+		Connection con = ConnectionManager.getConnection();
+		
+		String query = "select a.title, a.creation_year, a.type, a.medium, a.dimensions, a.description, a.price, a.status, a.artist_id , a.artwork_id from Artwork a left join Exhibition_Artwork ex on a.artwork_id = ex.artwork_id where ex.exhibition_id = ? ";
+
+		try (PreparedStatement pstm = con.prepareStatement(query)) {
+			pstm.setInt(1, id);
+			ResultSet res = pstm.executeQuery();
+			
+			List<Artwork> Artworks = new ArrayList<>();
+
+			while (res.next()) {
+				
+				Artwork resaw = new Artwork();
+				
+				resaw.setTitle(res.getString(1));
+				resaw.setCreationYear(res.getInt(2));
+				resaw.setType(res.getString(3));
+				resaw.setMedium(res.getString(4));
+				resaw.setDimensions(res.getString(5));
+				resaw.setDescription(res.getString(6));
+				resaw.setPrice(res.getDouble(7));
+				resaw.setStatus(res.getString(8));
+				
+				//resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
 				
 				resaw.setTags(getTags(res.getInt(10)));
 				
@@ -113,7 +157,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setInt(1, id);
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<ArtworkTag> tags = new ArrayList<>();
 

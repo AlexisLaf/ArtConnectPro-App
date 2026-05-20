@@ -8,6 +8,7 @@ import com.project.artconnect.service.WorkshopService;
 import com.project.artconnect.service.ArtistService;
 import java.time.LocalDateTime;
 import java.util.*;
+import com.project.artconnect.dao.impl.WorkshopDaoImpl;
 
 public class WorkshopServiceImpl implements WorkshopService {
     private final Map<String, Workshop> workshops = new LinkedHashMap<>();
@@ -16,12 +17,11 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     public void initData(ArtistService artistService) {
-        addWorkshop("Mastering Oil Painting", LocalDateTime.now().plusDays(5),
-                artistService.getArtistByName("Leonardo Vinci").orElse(null), 150.0, "Intermediate", "Florence Studio");
-        addWorkshop("Impressionist Landscapes", LocalDateTime.now().plusDays(10),
-                artistService.getArtistByName("Claude Monet").orElse(null), 120.0, "Beginner", "Giverny Gardens");
-        addWorkshop("Sculpting Modernity", LocalDateTime.now().plusDays(15),
-                artistService.getArtistByName("Auguste Rodin").orElse(null), 200.0, "Advanced", "Paris Workshop");
+		/*for (Artist artist : artistService.getAllArtists()){
+			WorkshopDaoImpl.findbyInstructor(artist.get
+		}
+        wsdao.findalll();
+		workshops.put(name, wshop);*/
     }
 
     private void addWorkshop(String title, LocalDateTime date, Artist instructor, double price, String level,

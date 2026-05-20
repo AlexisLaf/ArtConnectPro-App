@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import com.project.artconnect.model.Exhibition;
 
 public class GalleryDaoImpl implements GalleryDao {
     public Optional<Gallery> findById(Long id){
@@ -19,7 +20,7 @@ public class GalleryDaoImpl implements GalleryDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setInt(1, Math.toIntExact(id));
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 
 			while (res.next()) {
 				
@@ -33,8 +34,11 @@ public class GalleryDaoImpl implements GalleryDao {
 				resgal.setRating(res.getDouble(6));
 				resgal.setWebsite(res.getString(7));
 				
-				//resgal.setExhibitions addExhibition
-				//private List<Exhibition> exhibitions = new ArrayList<>();
+				List<Exhibition> exhibits = ExhibitionDaoImpl.findByGallery(Math.toIntExact(id));
+				for (Exhibition exhibit : exhibits){
+					exhibit.setGallery(resgal);
+				}
+				resgal.setExhibitions(exhibits);
 
 				return Optional.of(resgal);
 			}
@@ -54,11 +58,11 @@ public class GalleryDaoImpl implements GalleryDao {
     public static List<Gallery> findAlll(){
 		Connection con = ConnectionManager.getConnection();
 		
-		String query = "select name, address, owner_name, opening_hours, contact_phone, rating, website from Gallery, gallery_id";
+		String query = "select name, address, owner_name, opening_hours, contact_phone, rating, website, gallery_id from Gallery";
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Gallery> galleries = new ArrayList<>();
 
@@ -75,8 +79,12 @@ public class GalleryDaoImpl implements GalleryDao {
 				resgal.setWebsite(res.getString(7));
 				
 				int gal_id = res.getInt(8);
-				//resgal.setExhibitions addExhibition
-				//private List<Exhibition> exhibitions = new ArrayList<>();
+				
+				List<Exhibition> exhibits = ExhibitionDaoImpl.findByGallery(gal_id);
+				for (Exhibition exhibit : exhibits){
+					exhibit.setGallery(resgal);
+				}
+				resgal.setExhibitions(exhibits);
 
 				galleries.add(resgal);
 			}

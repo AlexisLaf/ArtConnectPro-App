@@ -45,8 +45,6 @@ public class ArtistDaoImpl implements ArtistDao {
 				// Fill the list with other dao implementations.
 				resA.setDisciplines(getDiscipline(res.getInt(10)));
 				
-				System.out.println(resA.getDisciplines());
-				
 				ArtworkDaoImpl tmp = new ArtworkDaoImpl();
 				resA.setArtworks(tmp.findByArtistName(resA.getName()));
 				
@@ -152,7 +150,6 @@ public class ArtistDaoImpl implements ArtistDao {
 			List<Discipline> disciplines = new ArrayList<>();
 
 			while (res.next()) {
-				System.out.println("There exist a result");
 				
 				Discipline resD = new Discipline();
 				
@@ -177,7 +174,7 @@ public class ArtistDaoImpl implements ArtistDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 			
 			List<Discipline> disciplines = new ArrayList<>();
 

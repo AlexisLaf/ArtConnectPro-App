@@ -1,3 +1,8 @@
+# GEN AI USE DISCLOSURE.
+
+The usage of GEN AI in this repository was made by the proffessor providing us with this project.
+I did not use any Generative AI while completing the project and finishing it.
+
 # ArtConnect Pro - Local Art Community Platform
 
 ## Overview

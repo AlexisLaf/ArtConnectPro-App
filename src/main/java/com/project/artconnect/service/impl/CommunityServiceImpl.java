@@ -14,13 +14,14 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     public void initData(ArtworkService artworkService) {
-        CommunityMember alice = addMember("Alice Wonderland", "alice@art.com", "Paris");
+        
+		/*CommunityMember alice = addMember("Alice Wonderland", "alice@art.com", "Paris");
         CommunityMember bob = addMember("Bob Ross", "bob@happytrees.com", "London");
         CommunityMember charlie = addMember("Charlie Brown", "charlie@peanuts.com", "New York");
 
         addReview(alice, artworkService.getArtworkByTitle("Mona Lisa").orElse(null), 5, "Unbelievable detail!");
         addReview(bob, artworkService.getArtworkByTitle("Water Lilies").orElse(null), 4, "The colors are stunning.");
-        addReview(charlie, artworkService.getArtworkByTitle("The Thinker").orElse(null), 5, "Deeply moving.");
+        addReview(charlie, artworkService.getArtworkByTitle("The Thinker").orElse(null), 5, "Deeply moving.");*/
     }
 
     private CommunityMember addMember(String name, String email, String city) {
