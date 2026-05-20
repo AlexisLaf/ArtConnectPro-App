@@ -54,6 +54,8 @@ public class JdbcArtistService implements ArtistService {
                         || a.getName().toLowerCase().contains(query.toLowerCase()))
                 .filter(a -> city == null || city.isBlank()
                         || a.getCity().equalsIgnoreCase(city))
+                .filter(a -> disciplineName == null
+                        || a.getDisciplines().stream().anyMatch(d -> d.getName().equals(disciplineName)))
                 .collect(Collectors.toList());
     }
 }

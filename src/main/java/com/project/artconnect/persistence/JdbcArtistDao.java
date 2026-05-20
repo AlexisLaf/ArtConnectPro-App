@@ -172,7 +172,38 @@ public class JdbcArtistDao implements ArtistDao {
         artist.setWebsite(rs.getString("website"));
         artist.setSocialMedia(rs.getString("social_media"));
         artist.setActive(rs.getBoolean("is_active"));
+        artist.setDisciplines(getDiscipline(rs.getInt("artist_id")));
 
         return artist;
     }
+
+    private static List<Discipline> getDiscipline(int id){
+		
+		String query = "select d.name from Discipline d inner join Artist_Discipline a on d.discipline_id = a.discipline_id where artist_id = ? ";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setInt(1, id);
+			
+			ResultSet res = stmt.executeQuery();
+			
+			List<Discipline> disciplines = new ArrayList<>();
+
+			while (res.next()) {
+				
+				Discipline resD = new Discipline();
+				
+				resD.setName(res.getString(1));
+				
+				disciplines.add(resD);
+
+			}
+			
+			return disciplines;
+			
+		} catch (SQLException e) {
+			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
+			return new ArrayList<>();
+		}
+	}
 }

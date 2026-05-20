@@ -44,7 +44,7 @@ CREATE TABLE Artwork (
     status VARCHAR(20) NOT NULL,
     FOREIGN KEY (artist_id) REFERENCES Artist(artist_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     CONSTRAINT chk_artwork_price CHECK (price >= 0),
     CONSTRAINT chk_artwork_status CHECK (status IN ('FOR_SALE', 'SOLD', 'EXHIBITED'))
 );
@@ -89,7 +89,7 @@ CREATE TABLE Exhibition (
     theme VARCHAR(150),
     FOREIGN KEY (gallery_id) REFERENCES Gallery(gallery_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     CONSTRAINT chk_exhibition_dates CHECK (end_date IS NULL OR end_date >= start_date)
 );
 
@@ -118,7 +118,7 @@ CREATE TABLE Workshop (
     level VARCHAR(30),
     FOREIGN KEY (instructor_artist_id) REFERENCES Artist(artist_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     CONSTRAINT chk_workshop_price CHECK (price >= 0),
     CONSTRAINT chk_workshop_duration CHECK (duration_minutes IS NULL OR duration_minutes > 0),
     CONSTRAINT chk_workshop_maxparticipants CHECK (max_participants IS NULL OR max_participants > 0),
@@ -156,7 +156,7 @@ CREATE TABLE Booking (
     payment_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     FOREIGN KEY (workshop_id) REFERENCES Workshop(workshop_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES CommunityMember(member_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
