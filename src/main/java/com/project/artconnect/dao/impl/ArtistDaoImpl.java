@@ -45,6 +45,8 @@ public class ArtistDaoImpl implements ArtistDao {
 				// Fill the list with other dao implementations.
 				resA.setDisciplines(getDiscipline(res.getInt(10)));
 				
+				System.out.println(resA.getDisciplines());
+				
 				ArtworkDaoImpl tmp = new ArtworkDaoImpl();
 				resA.setArtworks(tmp.findByArtistName(resA.getName()));
 				
@@ -76,7 +78,7 @@ public class ArtistDaoImpl implements ArtistDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setString(1, artistName);
-			int res = pstm.executeUpdate(query);
+			int res = pstm.executeUpdate();
 
 		} catch (SQLException e) {
 			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
@@ -101,7 +103,7 @@ public class ArtistDaoImpl implements ArtistDao {
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setInt(1, id);
-			ResultSet res = pstm.executeQuery(query);
+			ResultSet res = pstm.executeQuery();
 
 			while (res.next()) {
 				
@@ -140,15 +142,18 @@ public class ArtistDaoImpl implements ArtistDao {
 	public static List<Discipline> getDiscipline(int id){
 		Connection con = ConnectionManager.getConnection();
 		
-		String query = "select d.name from Discipline d inner join Artist_Discipline a on d.discipline_id = a.discipline_id where artist_id = ?";
+		String query = "select d.name from Discipline d inner join Artist_Discipline a on d.discipline_id = a.discipline_id where artist_id = ? ";
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			pstm.setInt(1, id);
-			ResultSet res = pstm.executeQuery(query);
+			
+			ResultSet res = pstm.executeQuery();
 			
 			List<Discipline> disciplines = new ArrayList<>();
 
 			while (res.next()) {
+				System.out.println("There exist a result");
+				
 				Discipline resD = new Discipline();
 				
 				resD.setName(res.getString(1));
@@ -168,7 +173,7 @@ public class ArtistDaoImpl implements ArtistDao {
 	public static List<Discipline> getDisciplines(){
 		Connection con = ConnectionManager.getConnection();
 		
-		String query = "select discipline_id, name from Discipline";
+		String query = "select name from Discipline";
 
 		try (PreparedStatement pstm = con.prepareStatement(query)) {
 			
@@ -179,7 +184,7 @@ public class ArtistDaoImpl implements ArtistDao {
 			while (res.next()) {
 				Discipline resD = new Discipline();
 				
-				resD.setName(res.getString(2));
+				resD.setName(res.getString(1));
 				
 				disciplines.add(resD);
 

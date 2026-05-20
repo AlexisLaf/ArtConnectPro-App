@@ -12,10 +12,10 @@ import javafx.application.Platform;
  * TODO: Students must implementation the getConnection logic.
  */
 public class ConnectionManager {
-	
+	/*
 	static {
 		Class.forName("com.mysql.jdbc.Driver"); 
-	}
+	}*/
 	
 	private static Connection Connection = null;
 
@@ -34,7 +34,13 @@ public class ConnectionManager {
 				Connection = DriverManager.getConnection(DatabaseConfig.URL, DatabaseConfig.USER, DatabaseConfig.PASSWORD);
 			}
 		} catch (SQLException ex) {
+			System.out.println(ex.getErrorCode() +"  "+ ex.getSQLState() +" "+ ex.getMessage());
+			System.out.println("\n\n\n\n\n\n");
 			Platform.exit();
+		}
+		
+		if (Connection == null){
+			throw new RuntimeException("THE CONNECTION IS STILL NULL");
 		}
 
 		return Connection;
