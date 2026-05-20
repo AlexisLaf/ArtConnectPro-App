@@ -13,14 +13,18 @@ import java.util.Optional;
  * initialization.
  */
 public class ServiceProvider {
-    private static final InMemoryArtistService artistService = new InMemoryArtistService();
+    /*private static final InMemoryArtistService artistService = new InMemoryArtistService();
     private static final InMemoryArtworkService artworkService = new InMemoryArtworkService();
     private static final InMemoryGalleryService galleryService = new InMemoryGalleryService();
     private static final InMemoryWorkshopService workshopService = new InMemoryWorkshopService();
-    private static final InMemoryCommunityService communityService = new InMemoryCommunityService();
+    private static final InMemoryCommunityService communityService = new InMemoryCommunityService();*/
 	
-	private static final WorkshopDaoImpl workshopServ = new WorkshopDaoImpl();
-	Optional<Workshop> resutl = workshopServ.findById(Long.getLong("10"));
+	private static final ArtistServiceImpl artistService = new ArtistServiceImpl();
+    private static final ArtworkServiceImpl artworkService = new ArtworkServiceImpl();
+    private static final GalleryServiceImpl galleryService = new GalleryServiceImpl();
+    private static final WorkshopServiceImpl workshopService = new WorkshopServiceImpl();
+    private static final CommunityServiceImpl communityService = new CommunityServiceImpl();
+	
 
     static {
         // Initialize services with their dependencies
@@ -49,4 +53,12 @@ public class ServiceProvider {
     public static CommunityService getCommunityService() {
         return communityService;
     }
+	
+	
+	/*
+	private static final ArtistDaoImpl artistService = new ArtistDaoImpl();
+    private static final ArtworkDaoImpl artworkService = new ArtworkDaoImpl();
+    private static final GalleryDaoImpl galleryService = new GalleryDaoImpl();
+    private static final WorkshopDaoImpl workshopService = new WorkshopDaoImpl();
+    private static final CommunityMemberDaoImpl communityService = new CommunityMemberDaoImpl();*/
 }

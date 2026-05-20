@@ -48,7 +48,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
-			return new ArrayList<>();;
+			return new ArrayList<>();
 		}
 		
 	}
@@ -66,7 +66,43 @@ public class ArtworkDaoImpl implements ArtworkDao {
 	}
 
     public List<Artwork> findByArtistName(String artistName){
-		throw new UnsupportedOperationException();
+		Connection con = ConnectionManager.getConnection();
+		
+		String query = "select a.title, a.creation_year, a.type, a.medium, a.dimensions, a.description, a.price, a.status, a.artist_id , artwork_id from Artwork a left join vw_artist_overview v on a.artist_id = v.artist_id where v.name = ? ";
+
+		try (PreparedStatement pstm = con.prepareStatement(query)) {
+			pstm.setString(1, artistName);
+			ResultSet res = pstm.executeQuery(query);
+			
+			List<Artwork> Artworks = new ArrayList<>();
+
+			while (res.next()) {
+				
+				Artwork resaw = new Artwork();
+				
+				resaw.setTitle(res.getString(1));
+				resaw.setCreationYear(res.getInt(2));
+				resaw.setType(res.getString(3));
+				resaw.setMedium(res.getString(4));
+				resaw.setDimensions(res.getString(5));
+				resaw.setDescription(res.getString(6));
+				resaw.setPrice(res.getDouble(7));
+				resaw.setStatus(res.getString(8));
+				
+				resaw.setArtist(ArtistDaoImpl.findById(res.getInt(9)));
+				
+				resaw.setTags(getTags(res.getInt(10)));
+				
+				Artworks.add(resaw);
+
+			}
+			
+			return Artworks;
+			
+		} catch (SQLException e) {
+			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
+			return new ArrayList<>();
+		}
 	}
 	
 	private static List<ArtworkTag> getTags(int id){
@@ -95,8 +131,9 @@ public class ArtworkDaoImpl implements ArtworkDao {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
-			return new ArrayList<>();;
+			return new ArrayList<>();
 		}
+			
 		
 		
 	}

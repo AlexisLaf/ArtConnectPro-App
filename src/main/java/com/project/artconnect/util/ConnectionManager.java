@@ -13,6 +13,9 @@ import javafx.application.Platform;
  */
 public class ConnectionManager {
 	
+	static {
+		Class.forName("com.mysql.jdbc.Driver"); 
+	}
 	
 	private static Connection Connection = null;
 

@@ -17,7 +17,7 @@ import com.project.artconnect.model.Discipline;
  * Data Access Object for Artist entity.
  */
 public class ArtistDaoImpl implements ArtistDao {
-    public List<Artist> findAll(){
+    public static List<Artist> findAlll(){
 		Connection con = ConnectionManager.getConnection();
 		
 		String query = "select name, bio, birth_year, contact_email, phone, city, website, social_media, is_active, artist_id from Artist";
@@ -84,6 +84,10 @@ public class ArtistDaoImpl implements ArtistDao {
 		}
 		
 		return ;
+	}
+	
+	public List<Artist> findAll(){
+		throw new UnsupportedOperationException();
 	}
 
     public List<Artist> findByCity(String city){
@@ -152,11 +156,40 @@ public class ArtistDaoImpl implements ArtistDao {
 				disciplines.add(resD);
 
 			}
+			
+			return disciplines;
+			
 		} catch (SQLException e) {
 			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
 			return new ArrayList<>();
 		}
+	}
+	
+	public static List<Discipline> getDisciplines(){
+		Connection con = ConnectionManager.getConnection();
 		
-		return new ArrayList<>();
+		String query = "select discipline_id, name from Discipline";
+
+		try (PreparedStatement pstm = con.prepareStatement(query)) {
+			
+			ResultSet res = pstm.executeQuery(query);
+			
+			List<Discipline> disciplines = new ArrayList<>();
+
+			while (res.next()) {
+				Discipline resD = new Discipline();
+				
+				resD.setName(res.getString(2));
+				
+				disciplines.add(resD);
+
+			}
+			
+			return disciplines;
+			
+		} catch (SQLException e) {
+			System.out.println(e.getErrorCode() + e.getSQLState() + e.getMessage());
+			return new ArrayList<>();
+		}
 	}
 }
